@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IPTV Blog | EXYU vodiči, instalacija i stabilan stream</title>
+  <meta name="description" content="IPTV Blog sa EXYU vodičima za instalaciju, aplikacije, uređaje, stabilan stream i dijasporu. Blog članci sa exyuiptv.app, exyuiptv.org i exyukanali.tv." />
+  <meta name="keywords" content="IPTV Blog, EXYU IPTV vodiči, IPTV instalacija, TiviMate, IPTV Smarters, Fire TV Stick, Android Box, Smart TV, dijaspora IPTV" />
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg2: #0b1b31;
+      --card: rgba(255,255,255,.08);
+      --card2: rgba(255,255,255,.12);
+      --text: #eef7ff;
+      --muted: #a8bfd4;
+      --line: rgba(255,255,255,.16);
+      --cyan: #18d5ff;
+      --cyan2: #00a8ff;
+      --orange: #ffb703;
+      --green: #22c55e;
+      --red: #ef4444;
+      --shadow: 0 28px 80px rgba(0,0,0,.42);
+      --radius: 26px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(24,213,255,.18), transparent 34rem),
+        radial-gradient(circle at 80% 8%, rgba(255,183,3,.14), transparent 28rem),
+        linear-gradient(180deg, #06101d 0%, #07111f 42%, #091527 100%);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    .topbar {
+      position: fixed;
+      z-index: 50;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(1180px, calc(100% - 28px));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 12px 14px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 999px;
+      background: rgba(5, 13, 25, .64);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 18px 48px rgba(0,0,0,.24);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-left: 8px;
+      font-weight: 900;
+      letter-spacing: -.03em;
+      white-space: nowrap;
+    }
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--cyan), var(--cyan2) 52%, var(--orange));
+      box-shadow: 0 0 28px rgba(24,213,255,.35);
+      color: #04101e;
+      font-weight: 1000;
+    }
+
+    .nav { display: flex; gap: 6px; align-items: center; }
+    .nav a {
+      font-size: .92rem;
+      color: rgba(238,247,255,.84);
+      padding: 10px 13px;
+      border-radius: 999px;
+      transition: .25s ease;
+    }
+    .nav a:hover { background: rgba(255,255,255,.1); color: #fff; }
+    .nav .order {
+      background: linear-gradient(135deg, var(--orange), #ff8a00);
+      color: #111827;
+      font-weight: 900;
+      box-shadow: 0 14px 36px rgba(255,183,3,.23);
+    }
+
+    .hero {
+      min-height: 760px;
+      display: grid;
+      align-items: center;
+      position: relative;
+      isolation: isolate;
+      padding: 140px 18px 84px;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(4,12,24,.94) 0%, rgba(4,12,24,.75) 46%, rgba(4,12,24,.42) 100%),
+        url('https://exyuiptv.org/images/hero-poster.webp') center/cover no-repeat;
+      transform: scale(1.04);
+      animation: slowZoom 18s ease-in-out infinite alternate;
+      z-index: -2;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px);
+      background-size: 78px 78px;
+      mask-image: linear-gradient(to bottom, black, transparent 85%);
+      z-index: -1;
+      opacity: .45;
+    }
+
+    @keyframes slowZoom {
+      from { transform: scale(1.02) translate3d(0,0,0); }
+      to { transform: scale(1.09) translate3d(-1.5%, -1.2%, 0); }
+    }
+
+    .container { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(340px, .9fr);
+      gap: 44px;
+      align-items: center;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border: 1px solid rgba(24,213,255,.35);
+      border-radius: 999px;
+      color: #bdf5ff;
+      background: rgba(24,213,255,.10);
+      font-weight: 800;
+      font-size: .9rem;
+      box-shadow: inset 0 0 30px rgba(24,213,255,.08);
+      animation: fadeUp .7s ease both;
+    }
+    .pulse {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 0 0 rgba(34,197,94,.8);
+      animation: pulse 1.7s infinite;
+    }
+    @keyframes pulse { 70% { box-shadow: 0 0 0 12px rgba(34,197,94,0); } 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); } }
+
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 5.45rem);
+      line-height: .95;
+      letter-spacing: -.075em;
+      margin: 22px 0 18px;
+      text-wrap: balance;
+      animation: fadeUp .7s .09s ease both;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #fff 0%, #bdf5ff 34%, var(--cyan) 64%, var(--orange) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero p {
+      color: rgba(238,247,255,.82);
+      font-size: clamp(1.08rem, 2vw, 1.32rem);
+      max-width: 720px;
+      margin: 0 0 28px;
+      animation: fadeUp .7s .18s ease both;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; animation: fadeUp .7s .27s ease both; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 50px;
+      padding: 13px 18px;
+      border-radius: 999px;
+      font-weight: 900;
+      border: 1px solid rgba(255,255,255,.16);
+      transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn.primary { background: linear-gradient(135deg, var(--orange), #ff8a00); color: #111827; box-shadow: 0 22px 48px rgba(255,183,3,.25); }
+    .btn.secondary { background: rgba(255,255,255,.08); color: #fff; backdrop-filter: blur(10px); }
+    .btn:hover { transform: translateY(-3px); box-shadow: 0 18px 50px rgba(0,0,0,.32); }
+    .btn span { transition: transform .25s ease; }
+    .btn:hover span { transform: translateX(4px); }
+
+    .hero-panel {
+      background: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.06));
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 34px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      animation: floatPanel 6s ease-in-out infinite, fadeUp .8s .22s ease both;
+    }
+    @keyframes floatPanel { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    .hero-card-img { height: 245px; border-radius: 24px; overflow: hidden; position: relative; }
+    .hero-card-img img { width:100%; height:100%; object-fit: cover; }
+    .hero-card-img::after { content:""; position:absolute; inset:0; background: linear-gradient(to top, rgba(0,0,0,.65), transparent); }
+    .mini-list { display: grid; gap: 10px; margin-top: 14px; }
+    .mini-item {
+      display: flex; gap: 12px; align-items: center;
+      padding: 12px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 18px;
+    }
+    .mini-icon { width: 36px; height: 36px; display:grid; place-items:center; border-radius: 12px; background: rgba(24,213,255,.14); color: #9ef3ff; flex: 0 0 auto; }
+    .mini-item strong { display:block; font-size:.94rem; }
+    .mini-item span { display:block; color: var(--muted); font-size:.84rem; margin-top:2px; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+
+    section { padding: 82px 0; }
+    .section-head { display: flex; justify-content: space-between; gap: 28px; align-items: end; margin-bottom: 30px; }
+    .section-head h2 { font-size: clamp(2rem, 4vw, 3.25rem); letter-spacing: -.06em; line-height: 1; margin: 0; }
+    .section-head p { color: var(--muted); max-width: 560px; margin: 0; }
+
+    .stats { display:grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-top: -48px; position: relative; z-index: 3; }
+    .stat {
+      padding: 24px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 24px;
+      background: rgba(255,255,255,.08);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 18px 50px rgba(0,0,0,.22);
+    }
+    .stat b { display:block; font-size: clamp(1.6rem, 3vw, 2.5rem); color: #fff; letter-spacing: -.05em; }
+    .stat span { color: var(--muted); font-weight: 700; }
+
+    .filters { display:flex; flex-wrap: wrap; gap: 10px; margin: 0 0 28px; }
+    .filter-btn {
+      border: 1px solid rgba(255,255,255,.16);
+      color: rgba(238,247,255,.9);
+      background: rgba(255,255,255,.06);
+      padding: 10px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 800;
+      transition: .25s ease;
+    }
+    .filter-btn.active, .filter-btn:hover { background: rgba(24,213,255,.16); border-color: rgba(24,213,255,.48); color: #fff; }
+
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+    .post-card {
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.055));
+      box-shadow: 0 24px 70px rgba(0,0,0,.22);
+      transform: translateY(18px);
+      opacity: 0;
+      transition: transform .35s ease, opacity .35s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+    .post-card.visible { transform: translateY(0); opacity: 1; }
+    .post-card:hover { transform: translateY(-8px); border-color: rgba(24,213,255,.42); box-shadow: 0 30px 90px rgba(0,0,0,.38); }
+    .post-image { height: 205px; position: relative; overflow: hidden; background: #11233b; }
+    .post-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
+    .post-card:hover .post-image img { transform: scale(1.08); }
+    .badge-row { position: absolute; inset: 14px 14px auto 14px; display:flex; justify-content: space-between; gap:8px; align-items:center; z-index:2; }
+    .badge { padding: 7px 10px; border-radius: 999px; background: rgba(5,13,25,.72); border: 1px solid rgba(255,255,255,.16); backdrop-filter: blur(10px); font-size: .76rem; font-weight: 900; color: #fff; }
+    .source { color: #04101e; background: linear-gradient(135deg, var(--cyan), #a7f3ff); }
+    .post-body { padding: 20px; }
+    .post-body h3 { margin: 0 0 10px; font-size: 1.18rem; line-height: 1.22; letter-spacing: -.025em; }
+    .post-body p { color: var(--muted); margin: 0 0 18px; font-size: .94rem; }
+    .post-link { display:inline-flex; align-items:center; gap:8px; color:#bdf5ff; font-weight: 900; }
+    .post-link span { transition:.25s ease; }
+    .post-link:hover span { transform: translateX(4px); }
+
+    .help-strip {
+      display:grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 16px;
+    }
+    .help-card {
+      padding: 22px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.075);
+      position: relative;
+      overflow: hidden;
+    }
+    .help-card::before {
+      content:"";
+      position:absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 999px;
+      background: rgba(24,213,255,.12);
+      top: -70px;
+      right: -70px;
+    }
+    .help-card b { display:block; font-size: 1.06rem; margin-bottom: 8px; }
+    .help-card p { color: var(--muted); margin: 0; font-size: .92rem; }
+    .help-card .num { color: var(--orange); font-weight: 1000; font-size: 1.6rem; margin-bottom: 14px; display:block; }
+
+    .cta-band {
+      border-radius: 36px;
+      padding: 38px;
+      border: 1px solid rgba(255,255,255,.15);
+      background:
+        linear-gradient(90deg, rgba(5,13,25,.92), rgba(5,13,25,.68)),
+        url('https://exyuiptv.app/images/blog/najbolja-iptv-aplikacija-za-utakmice-smart-tv-2026.webp') center/cover no-repeat;
+      box-shadow: var(--shadow);
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap: 22px;
+      align-items:center;
+    }
+    .cta-band h2 { margin:0 0 10px; font-size: clamp(1.8rem, 4vw, 3rem); letter-spacing: -.05em; }
+    .cta-band p { margin:0; color: rgba(238,247,255,.78); max-width: 650px; }
+
+    footer { padding: 40px 0 55px; border-top: 1px solid rgba(255,255,255,.11); color: var(--muted); }
+    .footer-row { display:flex; justify-content:space-between; gap: 20px; flex-wrap:wrap; }
+    .footer-row a { color: #bdf5ff; font-weight: 800; }
+
+    @media (max-width: 980px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-panel { max-width: 620px; }
+      .grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .stats, .help-strip { grid-template-columns: repeat(2,1fr); }
+      .section-head { align-items: start; flex-direction: column; }
+      .cta-band { grid-template-columns: 1fr; }
+      .nav { display: none; }
+    }
+    @media (max-width: 640px) {
+      .topbar { top: 10px; border-radius: 22px; }
+      .brand { font-size: .92rem; }
+      .hero { min-height: auto; padding-top: 120px; }
+      .grid, .stats, .help-strip { grid-template-columns: 1fr; }
+      .post-image { height: 220px; }
+      .cta-band { padding: 26px; border-radius: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="IPTV Blog početna">
+      <span class="brand-mark">EX</span>
+      <span>IPTV Blog Vodiči</span>
+    </a>
+    <nav class="nav" aria-label="Glavna navigacija">
+      <a href="#vodici">Vodiči</a>
+      <a href="#instalacija">Instalacija</a>
+      <a href="#pomoc">Pomoć</a>
+      <a href="https://exyuiptv.org" target="_blank" rel="noopener">EXYU IPTV</a>
+      <a class="order" href="https://exyuiptv.org/#paketi" target="_blank" rel="noopener">Paketi</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow"><span class="pulse"></span> Ažurirani EXYU IPTV vodiči za dijasporu</div>
+          <h1>IPTV Blog za <span class="gradient-text">instalaciju, stabilan stream i pametan setup.</span></h1>
+          <p>Vodiči za instalaciju, savjeti za stabilan stream i sve što trebate znati o EXYU IPTV-u. Članci su povezani direktno sa exyuiptv.app, exyuiptv.org i exyukanali.tv.</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#vodici">Pogledaj vodiče <span>→</span></a>
+            <a class="btn secondary" href="#instalacija">Brzi start <span>↓</span></a>
+          </div>
+        </div>
+
+        <aside class="hero-panel" aria-label="Izdvojeni IPTV savjeti">
+          <div class="hero-card-img">
+            <img src="https://exyuiptv.org/images/blog/beste-iptv-apps-2026.avif" alt="IPTV aplikacije na Smart TV ekranu" onerror="this.src='https://exyuiptv.org/images/hero-poster.webp'" />
+          </div>
+          <div class="mini-list">
+            <div class="mini-item"><div class="mini-icon">⚡</div><div><strong>Prije utakmice provjeri stream</strong><span>Ne testiraj sistem pet minuta prije derbija.</span></div></div>
+            <div class="mini-item"><div class="mini-icon">📺</div><div><strong>Smart TV, Firestick ili Android Box</strong><span>Izaberi uređaj prema navikama, ne prema reklami.</span></div></div>
+            <div class="mini-item"><div class="mini-icon">🛜</div><div><strong>LAN kabl kad je moguće</strong><span>Za sport i 4K stabilnost je važnija od brzine na papiru.</span></div></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <div class="container stats" aria-label="IPTV blog statistika">
+      <div class="stat"><b>25+</b><span>blog vodiča</span></div>
+      <div class="stat"><b>3</b><span>EXYU izvora</span></div>
+      <div class="stat"><b>24h</b><span>test logika</span></div>
+      <div class="stat"><b>4K</b><span>setup savjeti</span></div>
+    </div>
+
+    <section id="instalacija">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Brzi start za korisnika.</h2>
+          </div>
+          <p>Ovaj blok služi kao praktično pomagalo: korisnik prvo izabere uređaj, zatim aplikaciju, provjeri mrežu i tek onda javlja podršci ako nešto zapne.</p>
+        </div>
+        <div class="help-strip">
+          <div class="help-card"><span class="num">01</span><b>Izaberi uređaj</b><p>Smart TV je najjednostavniji, Android Box i Fire TV Stick su bolji za ozbiljniji IPTV setup.</p></div>
+          <div class="help-card"><span class="num">02</span><b>Instaliraj aplikaciju</b><p>TiviMate, IPTV Smarters ili kompatibilna Smart TV aplikacija — prema uređaju i korisniku.</p></div>
+          <div class="help-card"><span class="num">03</span><b>Testiraj mrežu</b><p>5 GHz Wi-Fi ili LAN kabl. Restart rutera često riješi više nego deset promjena aplikacije.</p></div>
+          <div class="help-card"><span class="num">04</span><b>Složi favorite</b><p>Sport, domaći kanali, dječiji program i rezervni kanali odvojeno. Manje lutanja, manje nervoze.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="vodici">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>IPTV Blog članci.</h2>
+          </div>
+          <p>Svaka kartica vodi direktno na originalni blogpost. Slike se učitavaju sa dostupnih izvora, a gdje slika nedostaje automatski se koristi vizuelni fallback iz istog EXYU IPTV stila.</p>
+        </div>
+
+        <div class="filters" aria-label="Filteri blog članaka">
+          <button class="filter-btn active" data-filter="all">Svi vodiči</button>
+          <button class="filter-btn" data-filter="app">exyuiptv.app</button>
+          <button class="filter-btn" data-filter="org">exyuiptv.org</button>
+          <button class="filter-btn" data-filter="tv">exyukanali.tv</button>
+          <button class="filter-btn" data-filter="Instalacija">Instalacija</button>
+          <button class="filter-btn" data-filter="Savjeti">Savjeti</button>
+          <button class="filter-btn" data-filter="Uređaji">Uređaji</button>
+          <button class="filter-btn" data-filter="Dijaspora">Dijaspora</button>
+        </div>
+
+        <div class="grid" id="postGrid"></div>
+      </div>
+    </section>
+
+    <section id="pomoc">
+      <div class="container">
+        <div class="cta-band">
+          <div>
+            <h2>Ne šalji korisnika odmah na podršku — prvo mu daj pravi vodič.</h2>
+            <p>Ova stranica može služiti kao centralni hub za IPTV pomoć: instalacija, aplikacije, Smart TV, Firestick, Android Box, stabilnost, VPN i dijaspora scenariji.</p>
+          </div>
+          <a class="btn primary" href="https://exyuiptv.org/blog/" target="_blank" rel="noopener">Otvori glavni blog <span>→</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-row">
+      <div>© 2026 IPTV Blog Vodiči — edukativni hub za EXYU IPTV korisnike.</div>
+      <div>
+        <a href="https://exyuiptv.app/blog/" target="_blank" rel="noopener">exyuiptv.app</a> ·
+        <a href="https://exyuiptv.org/blog/" target="_blank" rel="noopener">exyuiptv.org</a> ·
+        <a href="https://exyukanali.tv/blog/" target="_blank" rel="noopener">exyukanali.tv</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const fallbackImages = [
+      'https://exyuiptv.org/images/hero-poster.webp',
+      'https://exyuiptv.org/images/blog/beste-iptv-apps-2026.avif',
+      'https://exyuiptv.app/images/blog/najbolja-iptv-aplikacija-za-utakmice-smart-tv-2026.webp',
+      'https://exyuiptv.org/images/blog/iptv-ex-yu-dijaspora-2026.avif',
+      'https://exyuiptv.org/images/blog/bester-iptv-anbieter-2026.avif'
+    ];
+
+    const posts = [
+      {
+        source: 'exyuiptv.app', src: 'app', cat: 'Sport', read: '5 min',
+        title: 'Srbija utakmice uživo IPTV u Njemačkoj 2026',
+        desc: 'Sport, reprezentacija, domaći kanali i praktičan setup za EX YU dijasporu.',
+        url: 'https://exyuiptv.app/blog/srbija-utakmice-uzivo-iptv-nemacka-2026/',
+        img: 'https://exyuiptv.app/images/blog/srbija-utakmice-uzivo-iptv-nemacka-2026.webp'
+      },
+      {
+        source: 'exyuiptv.app', src: 'app', cat: 'Sport', read: '5 min',
+        title: 'Najbolja IPTV aplikacija za utakmice na Smart TV',
+        desc: 'Brzina, favoriti, EPG, stabilnost i izbor uređaja za sport.',
+        url: 'https://exyuiptv.app/blog/najbolja-iptv-aplikacija-za-utakmice-smart-tv-2026/',
+        img: 'https://exyuiptv.app/images/blog/najbolja-iptv-aplikacija-za-utakmice-smart-tv-2026.webp'
+      },
+      {
+        source: 'exyuiptv.app', src: 'app', cat: 'Sport', read: '5 min',
+        title: 'Liga prvaka Arena Sport IPTV 2026',
+        desc: 'Kako dijaspora sprema evropske fudbalske večeri bez nervoze.',
+        url: 'https://exyuiptv.app/blog/liga-prvaka-arena-sport-iptv-dijaspora-2026/',
+        img: 'https://exyuiptv.app/images/blog/liga-prvaka-arena-sport-iptv-dijaspora-2026.webp'
+      },
+      {
+        source: 'exyuiptv.app', src: 'app', cat: 'Uređaji', read: '4 min',
+        title: 'Smart TV uređaji i Balkan IPTV postavke',
+        desc: 'Mreža, slika, aplikacije i prelazak na zaseban player kada zatreba.',
+        url: 'https://exyuiptv.app/blog/samsung-lg-balkan-iptv-postavke-2026/',
+        img: 'https://exyuiptv.app/images/blog/samsung-lg-balkan-iptv-postavke-2026.webp'
+      },
+      {
+        source: 'exyuiptv.app', src: 'app', cat: 'Savjeti', read: '4 min',
+        title: 'IPTV besplatno testirati 2026',
+        desc: 'Kako dobiti 24h test nalog i šta obavezno provjeriti tokom probe.',
+        url: 'https://exyuiptv.app/blog/iptv-besplatno-testirati-24h/',
+        img: 'https://exyuiptv.app/images/blog/iptv-besplatno-testirati-24h.webp'
+      },
+      {
+        source: 'exyuiptv.app', src: 'app', cat: 'Savjeti', read: '5 min',
+        title: 'Kako poboljšati kvalitetu IPTV streama',
+        desc: 'Praktični savjeti za manje bufferiranja i stabilniji IPTV stream.',
+        url: 'https://exyuiptv.app/blog/kako-poboljsati-kvalitetu-iptv-streama/',
+        img: 'https://exyuiptv.app/images/blog/kako-poboljsati-kvalitetu-iptv-streama.webp'
+      },
+      {
+        source: 'exyuiptv.app', src: 'app', cat: 'Vodic', read: '6 min',
+        title: 'Šta je IPTV i kako radi',
+        desc: 'Osnovno objašnjenje IPTV-a za korisnike koji tek počinju.',
+        url: 'https://exyuiptv.app/blog/sta-je-iptv-i-kako-radi/',
+        img: 'https://exyuiptv.app/images/blog/sta-je-iptv-i-kako-radi.webp'
+      },
+      {
+        source: 'exyuiptv.app', src: 'app', cat: 'Instalacija', read: '5 min',
+        title: 'Kako instalirati IPTV na Android Box',
+        desc: 'Jasni koraci od preuzimanja aplikacije do prvog pokretanja.',
+        url: 'https://exyuiptv.app/blog/kako-instalirati-iptv-na-android-box/',
+        img: 'https://exyuiptv.org/images/blog/najbolji-iptv-box-2026-4k-exyu.avif'
+      },
+
+      {
+        source: 'exyuiptv.org', src: 'org', cat: 'Dijaspora', read: '8 min',
+        title: 'Kako gledati domaće kanale u Njemačkoj',
+        desc: 'Kompletan vodič za bosanske, srpske i hrvatske kanale u Njemačkoj.',
+        url: 'https://exyuiptv.org/blog/kako-gledati-domace-kanale-njemacka/',
+        img: 'https://exyuiptv.org/images/blog/kako-gledati-domace-kanale-njemacka.avif'
+      },
+      {
+        source: 'exyuiptv.org', src: 'org', cat: 'Vodic', read: '8 min',
+        title: 'Najbolji IPTV provajder 2026',
+        desc: 'Test i preporuka za Ex-Yu dijasporu, sa fokusom na stabilnost i vrijednost.',
+        url: 'https://exyuiptv.org/blog/bester-iptv-anbieter-2026/',
+        img: 'https://exyuiptv.org/images/blog/bester-iptv-anbieter-2026.avif'
+      },
+      {
+        source: 'exyuiptv.org', src: 'org', cat: 'Dijaspora', read: '9 min',
+        title: 'IPTV Ex-Yu dijaspora 2026',
+        desc: 'Kompletan vodič za Balkance u Evropi: kanali, uređaji i gledanje domaće TV.',
+        url: 'https://exyuiptv.org/blog/iptv-ex-yu-dijaspora-2026/',
+        img: 'https://exyuiptv.org/images/blog/iptv-ex-yu-dijaspora-2026.avif'
+      },
+      {
+        source: 'exyuiptv.org', src: 'org', cat: 'Savjeti', read: '7 min',
+        title: 'VPN za IPTV — treba li vam VPN?',
+        desc: 'Kada VPN pomaže, kada ne pomaže i šta korisnik treba znati.',
+        url: 'https://exyuiptv.org/blog/vpn-fuer-iptv/',
+        img: 'https://exyuiptv.org/images/blog/vpn-fuer-iptv.avif'
+      },
+      {
+        source: 'exyuiptv.org', src: 'org', cat: 'Savjeti', read: '8 min',
+        title: 'Najbolje IPTV aplikacije 2026',
+        desc: 'TiviMate, IPTV Smarters, OTT Navigator i ostale aplikacije za EXYU setup.',
+        url: 'https://exyuiptv.org/blog/beste-iptv-apps-2026/',
+        img: 'https://exyuiptv.org/images/blog/beste-iptv-apps-2026.avif'
+      },
+      {
+        source: 'exyuiptv.org', src: 'org', cat: 'Savjeti', read: '7 min',
+        title: 'IPTV aplikacije za Smart TV',
+        desc: 'Samsung, LG i Sony Smart TV vodič za dijasporu.',
+        url: 'https://exyuiptv.org/blog/iptv-apps-smart-tv-dijaspora/',
+        img: 'https://exyuiptv.org/images/blog/iptv-apps-smart-tv-dijaspora.avif'
+      },
+      {
+        source: 'exyuiptv.org', src: 'org', cat: 'Uređaji', read: '8 min',
+        title: 'IPTV za Fire TV Stick 2026',
+        desc: 'EXYU setup vodič za Amazon Fire TV Stick, aplikacije i postavke.',
+        url: 'https://exyuiptv.org/blog/iptv-za-firestick-2026-exyu-setup/',
+        img: 'https://exyuiptv.org/images/blog/iptv-za-firestick-2026-exyu-setup.avif'
+      },
+      {
+        source: 'exyuiptv.org', src: 'org', cat: 'Uređaji', read: '8 min',
+        title: 'Najbolji IPTV Box 2026 za 4K EXYU streaming',
+        desc: 'Top Android box uređaji za stabilan IPTV stream.',
+        url: 'https://exyuiptv.org/blog/najbolji-iptv-box-2026-4k-exyu/',
+        img: 'https://exyuiptv.org/images/blog/najbolji-iptv-box-2026-4k-exyu.avif'
+      },
+
+      {
+        source: 'exyukanali.tv', src: 'tv', cat: 'Instalacija', read: 'iOS',
+        title: 'Kako instalirati EXYU IPTV na iPhone i iPad',
+        desc: 'iOS vodič za IPTV Smarters, GSE Smart IPTV i druge iOS aplikacije.',
+        url: 'https://exyukanali.tv/blog/exyu-iptv-iphone-ipad/',
+        img: 'https://exyuiptv.app/images/blog/najbolja-iptv-aplikacija-za-utakmice-smart-tv-2026.webp'
+      },
+      {
+        source: 'exyukanali.tv', src: 'tv', cat: 'Savjeti', read: 'App',
+        title: 'IPTV Smarters Pro postavke za EXYU IPTV',
+        desc: 'Podešavanje IPTV Smarters Pro aplikacije za optimalnu sliku i stabilnost.',
+        url: 'https://exyukanali.tv/blog/iptv-smarters-pro-postavke/',
+        img: 'https://exyuiptv.org/images/blog/beste-iptv-apps-2026.avif'
+      },
+      {
+        source: 'exyukanali.tv', src: 'tv', cat: 'Savjeti', read: 'App',
+        title: 'TiviMate postavke za EXYU IPTV',
+        desc: 'EPG, organizacija kanala i korak-po-korak podešavanje.',
+        url: 'https://exyukanali.tv/blog/tivimate-postavke-za-exyu-iptv/',
+        img: 'https://exyuiptv.org/images/blog/beste-iptv-apps-2026.avif'
+      },
+      {
+        source: 'exyukanali.tv', src: 'tv', cat: 'Dijaspora', read: 'DE',
+        title: 'EXYU IPTV u Njemačkoj 2026',
+        desc: 'Vodič za Bošnjake i dijasporu: kanali, cijena, instalacija i podrška.',
+        url: 'https://exyukanali.tv/blog/exyu-iptv-njemacka/',
+        img: 'https://exyuiptv.org/images/blog/kako-gledati-domace-kanale-njemacka.avif'
+      },
+      {
+        source: 'exyukanali.tv', src: 'tv', cat: 'Uređaji', read: '8 min',
+        title: 'Najbolji IPTV Box u 2026',
+        desc: 'Kompletna usporedba Android TV box uređaja za EXYU IPTV.',
+        url: 'https://exyukanali.tv/blog/najbolji-iptv-box-2026/',
+        img: 'https://exyuiptv.org/images/blog/najbolji-iptv-box-2026-4k-exyu.avif'
+      },
+      {
+        source: 'exyukanali.tv', src: 'tv', cat: 'Vodic', read: '6 min',
+        title: 'Šta je IPTV i kako radi',
+        desc: 'Jednostavno objašnjenje IPTV tehnologije i potrebnih uređaja.',
+        url: 'https://exyukanali.tv/blog/sta-je-iptv-i-kako-radi/',
+        img: 'https://exyuiptv.org/images/hero-poster.webp'
+      },
+      {
+        source: 'exyukanali.tv', src: 'tv', cat: 'Savjeti', read: '5 min',
+        title: 'Kako poboljšati kvalitetu IPTV streama',
+        desc: '10 provjerenih savjeta za manje bufferinga i stabilniji IPTV.',
+        url: 'https://exyukanali.tv/blog/kako-poboljsati-kvalitetu-iptv-streama/',
+        img: 'https://exyuiptv.app/images/blog/samsung-lg-balkan-iptv-postavke-2026.webp'
+      },
+      {
+        source: 'exyukanali.tv', src: 'tv', cat: 'Instalacija', read: 'Android',
+        title: 'Kako instalirati IPTV na Android Box',
+        desc: 'Kompletan vodič za instalaciju IPTV aplikacije na Android TV Box.',
+        url: 'https://exyukanali.tv/blog/android-box-iptv-instalacija/',
+        img: 'https://exyuiptv.org/images/blog/najbolji-iptv-box-2026-4k-exyu.avif'
+      },
+      {
+        source: 'exyukanali.tv', src: 'tv', cat: 'Instalacija', read: 'Fire TV',
+        title: 'Kako instalirati IPTV na Fire TV Stick',
+        desc: 'Postavljanje IPTV aplikacije na Amazon Fire TV Stick bez komplikacija.',
+        url: 'https://exyukanali.tv/blog/fire-tv-stick-iptv-instalacija/',
+        img: 'https://exyuiptv.org/images/blog/iptv-za-firestick-2026-exyu-setup.avif'
+      },
+      {
+        source: 'exyukanali.tv', src: 'tv', cat: 'Instalacija', read: 'Samsung',
+        title: 'Kako instalirati IPTV na Samsung TV',
+        desc: 'Korak-po-korak vodič za Samsung Smart TV uređaje.',
+        url: 'https://exyukanali.tv/blog/kako-instalirati-iptv-na-samsung-tv/',
+        img: 'https://exyuiptv.org/images/blog/iptv-apps-smart-tv-dijaspora.avif'
+      }
+    ];
+
+    const grid = document.getElementById('postGrid');
+    const buttons = document.querySelectorAll('.filter-btn');
+
+    function fallbackFor(index) {
+      return fallbackImages[index % fallbackImages.length];
+    }
+
+    function render(filter = 'all') {
+      grid.innerHTML = '';
+      const filtered = posts.filter(p => filter === 'all' || p.src === filter || p.cat === filter);
+      filtered.forEach((post, index) => {
+        const article = document.createElement('article');
+        article.className = 'post-card';
+        article.innerHTML = `
+          <a href="${post.url}" target="_blank" rel="noopener" aria-label="${post.title}">
+            <div class="post-image">
+              <img src="${post.img}" alt="${post.title}" loading="lazy" onerror="this.onerror=null;this.src='${fallbackFor(index)}';" />
+              <div class="badge-row">
+                <span class="badge">${post.cat}</span>
+                <span class="badge source">${post.source}</span>
+              </div>
+            </div>
+            <div class="post-body">
+              <h3>${post.title}</h3>
+              <p>${post.desc}</p>
+              <div class="post-link">Otvori vodič <span>→</span></div>
+            </div>
+          </a>
+        `;
+        grid.appendChild(article);
+      });
+      requestAnimationFrame(() => observeCards());
+    }
+
+    function observeCards() {
+      const cards = document.querySelectorAll('.post-card');
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: .12 });
+      cards.forEach((card, i) => {
+        card.style.transitionDelay = `${Math.min(i * 35, 300)}ms`;
+        observer.observe(card);
+      });
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        render(btn.dataset.filter);
+      });
+    });
+
+    render();
+  </script>
+</body>
+</html>
